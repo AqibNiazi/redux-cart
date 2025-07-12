@@ -4,7 +4,7 @@ import Layout from "./components/Layout/Layout";
 import Products from "./components/Shop/Products";
 import { Fragment, useEffect } from "react";
 import Notification from "./components/UI/Notification";
-import { sendCartData } from "./store/Cart-Slice";
+import { fetchCartData, sendCartData } from "./store/Cart-Actions";
 let isInitial = true;
 function App() {
   const dispatch = useDispatch();
@@ -13,12 +13,18 @@ function App() {
   const cart = useSelector((state) => state.cart);
 
   useEffect(() => {
+    dispatch(fetchCartData());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (isInitial) {
       isInitial = false;
       return;
     }
-    dispatch(sendCartData(cart));
-  }, [cart]);
+    if (cart.changed) {
+      dispatch(sendCartData(cart));
+    }
+  }, [cart, dispatch]);
 
   return (
     <Fragment>
