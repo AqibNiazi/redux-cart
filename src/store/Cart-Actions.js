@@ -3,14 +3,7 @@ import { showNotification } from "./UI-Slice";
 
 export const fetchCartData = () => {
   return async (dispatch) => {
-    // Show a notification that the cart data is being fetched
-    dispatch(
-      showNotification({
-        status: "pending",
-        title: "Fetching...",
-        message: "Fetching cart data!",
-      })
-    );
+
 
     const fetchData = async () => {
       const response = await fetch(
@@ -25,7 +18,12 @@ export const fetchCartData = () => {
 
     try {
       const cartData = await fetchData();
-      dispatch(replaceCart(cartData));
+      dispatch(
+        replaceCart({
+          items: cartData.items || [],
+          totalQuantity: cartData.totalQuantity || 0,
+        })
+      );
     } catch (error) {
       dispatch(
         showNotification({

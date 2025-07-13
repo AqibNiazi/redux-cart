@@ -13,15 +13,18 @@ function App() {
   const cart = useSelector((state) => state.cart);
 
   useEffect(() => {
+    console.log("Fetching cart data...");
     dispatch(fetchCartData());
   }, [dispatch]);
 
   useEffect(() => {
+    console.log("Cart changed:", cart);
     if (isInitial) {
       isInitial = false;
       return;
     }
     if (cart.changed) {
+      console.log("Sending cart data...");
       dispatch(sendCartData(cart));
     }
   }, [cart, dispatch]);
